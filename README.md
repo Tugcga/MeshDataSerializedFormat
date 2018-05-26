@@ -2,7 +2,7 @@
 
 This format developed specialy for saving and reading data of 3d-meshes and other similar objects.
 
-##Format description
+## Format description
 
 * File starts from 4 bytes: 2-byte format identifier (actual 31250 number) and 2-byte version identifier
 * Next file contains ordered sequence of so-called "frame containers" (or simply containers). Each container contains data for the given set of frames. 
@@ -13,7 +13,7 @@ This format developed specialy for saving and reading data of 3d-meshes and othe
  * If the name is not empty, then the next bytes store this name.
  * Next container contains the sequence of data records. All these should be in the same format, and can contains int, float and bool values.
 
-##How to use
+## How to use
 
 1. Create the main object: 
 ```
@@ -40,7 +40,7 @@ next_container.add_data([(3, 3, 3), (4, 4, 4), (5, 5, 5)])
 doc.save_to_file(file_path)
 ```
 
-##Using data type and context
+## Using data type and context
 
 When adding data toe the container you can specify the type of this data and it context. By default type is KEY_TYPE_UNKNOWN, but it is convinent to set KEY_TYPE_POSITION when data contains some positions of object, or KEY_TYPE_VERTEX_NORMAL if this data contains coordinates of normals and so on. But the data type does not describe actual data. For example: different parts of object has normals - vertices, polygons, polygon corners. The context key used to distinguish these cases. So, for adding positions os the mesh vertices tou should use:
 ```
