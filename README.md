@@ -1,17 +1,17 @@
 # Mesh Data Serialized Format
 
-This format developed specialy for saving and reading data of 3d-meshes and other similar objects.
+This format developed specialy for saving and reading data of 3d-meshes and other similar objects. Works with Python 2.x and 3.x without any dependencies (exept standard sys and struct modules)
 
 ## Format description
 
-* File starts from 4 bytes: 2-byte format identifier (actual 31250 number) and 2-byte version identifier
+* File starts from 4 bytes: 2-byte format identifier (actual 31250 number) and 2-byte version identifier.
 * Next file contains ordered sequence of so-called "frame containers" (or simply containers). Each container contains data for the given set of frames. 
- * Container starts from header of 18 bytes: 2 bytes for the section key, 4 bytes for the start frame, 4 bytes for the end frame, 8 bytes for the size of complete container without header. So, you can jump over this size and start read the header of the next container.
- * Next 6 bytes contains zero-section of the data: 2 bytes for the section key, 2 bytes for the length of data signature string, 2 bytes for the number of properties of this data section.
- * Next is header-section for the data. The size of this section is 2 + (signature length) + 10 * (properties count). This section contains 2-bytes header key, the string with actual data signature, the sequaence of pairs: 2-bytes parameter key and 8-bytes parameter value.
- * Parameters always contain the following data: the count of data records, the size of one data record, total size of all data recotds, identifier of the data type, identifier of the data context, the size of data name string.
- * If the name is not empty, then the next bytes store this name.
- * Next container contains the sequence of data records. All these should be in the same format, and can contains int, float and bool values.
+  * Container starts from header of 18 bytes: 2 bytes for the section key, 4 bytes for the start frame, 4 bytes for the end frame, 8 bytes for the size of complete container without header. So, you can jump over this size and start read the header of the next container.
+  * Next 6 bytes contains zero-section of the data: 2 bytes for the section key, 2 bytes for the length of data signature string, 2 bytes for the number of properties of this data section.
+  * Next is header section for the data. The size of this section is 2 + (signature length) + 10 * (properties count). This section contains 2-bytes header key, the string with actual data signature and the sequaence of pairs: 2-bytes parameter key and 8-bytes parameter value.
+  * Parameters always contain the following data: the count of data records, the size of one data record, total size of all data records, identifier of the data type, identifier of the data context, the size of the data name string.
+  * If the name is not empty, then the next bytes store this name.
+  * Next container contains the sequence of data records. All records should be in the same format and can contains int, float and bool values.
 
 ## How to use
 
@@ -42,11 +42,11 @@ doc.save_to_file(file_path)
 
 ## Using data type and context
 
-When adding data toe the container you can specify the type of this data and it context. By default type is KEY_TYPE_UNKNOWN, but it is convinent to set KEY_TYPE_POSITION when data contains some positions of object, or KEY_TYPE_VERTEX_NORMAL if this data contains coordinates of normals and so on. But the data type does not describe actual data. For example: different parts of object has normals - vertices, polygons, polygon corners. The context key used to distinguish these cases. So, for adding positions os the mesh vertices tou should use:
+When adding data to the container you can specify the type of this data and it context. By default type is KEY_TYPE_UNKNOWN, but it is convinent to set KEY_TYPE_POSITION when data contains some positions of object, or KEY_TYPE_NORMAL if this data contains coordinates of normals and so on. But the data type does not describe actual data. For example: different parts of object has normals - vertices, polygons, polygon corners. The context key used to distinguish these cases. So, for adding positions of the mesh vertices you should use:
 ```
 container.add_data(data_array, data_context=KEY_CONTEXT_VERTEX, data_type=KEY_TYPE_POSITION)
 ```
-If the data contains position of the object, then you shoud use:
+If the data contains position of the object, then you should use:
 ```
 container.add_data(data_array, data_context=KEY_CONTEXT_OBJECT, data_type=KEY_TYPE_POSITION)
 ```
@@ -55,4 +55,4 @@ To get data of some type from container you can call:
 ```
 container.get_data_by_type(type)
 ```
-This command return the array of tuples for the data of given type in container. There are other methods to obtain data for the given type and context.
+This command returns the array of tuples of the data of given type in container. There are other methods to obtain data for the given type and context.
